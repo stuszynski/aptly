@@ -51,8 +51,10 @@ action :create do
   elsif !new_resource.keyid.nil? && !new_resource.keyserver.nil?
     install_key(new_resource.keyid, new_resource.keyserver)
   end
+  flags = new_resource.flags.map { |name, value| "-#{name}='#{value}'" }.join(' ')
+
   execute "Creating mirror - #{new_resource.name}" do
-    command "aptly mirror create #{new_resource.name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
+    command "aptly mirror create #{flags} #{new_resource.name} #{new_resource.uri} #{new_resource.distribution} #{new_resource.component}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
