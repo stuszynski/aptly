@@ -30,4 +30,5 @@ attribute :name, :kind_of => String, :name_attribute => true
 attribute :type, :kind_of => String, :default => nil
 attribute :prefix, :kind_of => String, :default => nil
 attribute :distribution, :kind_of => String, :default => nil
-
+attribute :passphrase, :kind_of => String, :default => nil
+attribute :flags, :kind_of => Hash, :default => {}

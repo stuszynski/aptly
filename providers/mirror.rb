@@ -45,12 +45,27 @@ def install_local_key(keyfile)
   end
 end
 
+def install_key_string(key)
+  file "/tmp/#{new_resource.name}.key" do
+    content key
+  end
+  execute "Installing external repository key from #{new_resource.name}" do
+    command "gpg --no-default-keyring --keyring trustedkeys.gpg --import /tmp/#{new_resource.name}.key"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+  end
+end
+
 action :create do
-  if !new_resource.keyfile.nil?
+  if !new_resource.key.nil?
+    install_key_string(new_resource.key)
+  elsif !new_resource.keyfile.nil?
     install_local_key(new_resource.keyfile)
   elsif !new_resource.keyid.nil? && !new_resource.keyserver.nil?
     install_key(new_resource.keyid, new_resource.keyserver)
   end
+
   flags = new_resource.flags.map { |name, value| "-#{name}='#{value}'" }.join(' ')
 
   execute "Creating mirror - #{new_resource.name}" do
@@ -81,4 +96,3 @@ action :drop do
     only_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
   end
 end
-

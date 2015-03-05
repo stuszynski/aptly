@@ -24,8 +24,10 @@ def whyrun_supported?
 end
 
 action :create do
+  flags = new_resource.flags.map { |name, value| "-#{name}='#{value}'" }.join(' ')
+
   execute "Publish #{new_resource.type} - #{new_resource.name}" do
-    command "aptly publish #{new_resource.type} #{new_resource.name} #{new_resource.prefix}"
+    command "aptly publish #{flags} #{new_resource.type} #{new_resource.name} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
@@ -35,7 +37,7 @@ end
 
 action :update do
   execute "Updating distribution - #{new_resource.prefix} #{new_resource.name}" do
-    command "aptly publish update #{new_resource.name} #{new_resource.prefix}"
+    command "aptly publish update #{new_resource.name} #{new_resource.type} #{new_resource.prefix}"
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env

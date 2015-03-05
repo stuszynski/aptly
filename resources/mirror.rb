@@ -33,4 +33,5 @@ attribute :uri, :kind_of => String, :default => nil
 attribute :keyid, :kind_of => String, :default => nil
 attribute :keyserver, :kind_of => String, :default => nil
 attribute :keyfile, :kind_of => String, :default => nil
+attribute :key, :kind_of => String, :default => nil
 attribute :flags, :kind_of => Hash, :default => {}

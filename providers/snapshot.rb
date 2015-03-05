@@ -73,6 +73,17 @@ action :merge do
   end
 end
 
+action :merge_group do
+  snapshots = new_resource.snapshots.join(" ")
+  execute "Merge Snapshots [#{snapshots}]" do
+    command "aptly snapshot merge #{new_resource.name} #{snapshots}"
+    user node['aptly']['user']
+    group node['aptly']['group']
+    environment aptly_env
+    not_if %{ aptly snapshot -raw list | grep ^#{new_resource.name}$ }
+  end
+end
+
 action :drop do
   execute "Drop Snapshot #{new_resource.name}" do
     command "aptly snapshot drop #{new_resource.name}"

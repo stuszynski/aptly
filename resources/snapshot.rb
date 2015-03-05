@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-actions :create, :verify, :pull, :merge, :drop
+actions :create, :verify, :pull, :merge, :merge_group, :drop
 default_action :create if defined?(default_action)
 
 # Needed for Chef versions < 0.10.10
@@ -38,3 +38,4 @@ attribute :package, :kind_of => String, :default => nil
 attribute :deps, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :remove, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :latest, :kind_of => [TrueClass, FalseClass], :default => false
+attribute :snapshots, :kind_of => Array, :default => nil
