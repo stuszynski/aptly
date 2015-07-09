@@ -29,6 +29,7 @@ def install_key(keyid, keyserver)
     user node['aptly']['user']
     group node['aptly']['group']
     environment aptly_env
+    not_if %{ gpg --keyring #{node['aptly']['rootdir']}/.gnupg/trustedkeys.gpg --list-keys | grep #{keyid} }
   end
 end
 
@@ -79,4 +80,3 @@ action :drop do
     only_if %{ aptly mirror -raw list | grep ^#{new_resource.name}$ }
   end
 end
-
